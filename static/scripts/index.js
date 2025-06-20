@@ -264,19 +264,25 @@ function cleanValue(code) {
 function runCode() {
 	const commands = extractCommands(workspace);
 
-	console.log(commands);
+	if (commands !== []) {
+		console.log(commands);
 
-	fetch(location + 'api/blocks', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ commands })
-	})
-		.then(res => res.json())
-		.then(data => {
-			console.log('Server response:', data);
-			alert('Response:\n' + JSON.stringify(data.results, null, 2));
+		fetch(location + 'api/blocks', {
+			method: 'POST',
+			headers: {'Content-Type': 'application/json'},
+			body: JSON.stringify({commands})
 		})
-		.catch(console.error);
+			.then(res => {
+				if (res.status === 202) {
+					openModal("Success!", "Je programma is gestart!");
+				} else {
+					openModal("Failure!", "Er is een onbekende error in je code!")
+				}
+			})
+			.catch(console.error);
+	} else if (commands !== null) {
+		openModal("Failure!", "Je hebt geen programma om te starten!")
+	}
 }
 
 Blockly.Themes.Dark = Blockly.Theme.defineTheme('dark', {

@@ -1,8 +1,8 @@
-import threading
+from threading import Thread
 
-from flask import Flask, Response, request, render_template, url_for
+from flask import Flask, Response, request, render_template
+from flask_cors import CORS
 from naoqi import ALProxy
-from flask_cors import CORS, cross_origin
 
 robotIP = "192.168.2.196"
 robotPort = 9559
@@ -61,22 +61,29 @@ def say_something(args):
 
 
 @flask_app.route("/api/blocks", methods=["POST"])
-@cross_origin()
 def run():
 	data = request.get_json()
 
 	print data
 
-	if "commands" not in data:
+	if "commands" not in data or data["commands"] == []:
 		return Response(status=400)
 
-	for command in data["commands"]:
-		type = command["type"]
+	def handle():
+		for command in data["commands"]:
+			print "Processing " + str(command)
+			cmd_type = command.get("type")
+			if cmd_type == "say_something":
+				say_something(command.get("args", []))
+			else:
+				print "Unknow command type!"
 
-		if type == "say_something":
-			say_something(command["args"])
+	Thread(target=handle).start()
 
-	return Response(status=200)
+	print "Responding"
+
+	return Response(status=202)
+
 
 if __name__ == "__main__":
 	flask_app.run(debug=True)
