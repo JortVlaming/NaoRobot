@@ -1,0 +1,36 @@
+body {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    font-family: sans-serif;
+    color: white;
+}
+
+#runButton {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+}
+
+#runButton > img {
+    width: 64px;
+    height: auto;
+}
+
+@media (prefers-color-scheme: dark) {
+    #runButton > img {
+        width: 64px;
+        height: auto;
+    }
+
+    #runButton {
+        background-color: #2A2A2F;
+        border: #2A2A2F 5px solid;
+        border-radius: 5px;
+    }
+
+    #runButton:hover {
+        background-color: #3A3A42;
+        border: #3A3A42 5px solid;
+    }
+}
