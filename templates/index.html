@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Blockly Python Modular</title>
+	<script src="https://unpkg.com/blockly/blockly.min.js" type="text/javascript"></script>
+	<script src="https://unpkg.com/blockly/python.min.js" type="text/javascript"></script>
+</head>
+<body>
+<xml id="toolbox" style="display: none">
+	<category name="Programma" colour="#5CA65C">
+		<block type="start_program"></block>
+	</category>
+	<category name="Waardes" colour="#5C81A6">
+		<block type="text"></block>
+		<block type="math_number"></block>
+	</category>
+	<!--
+	<category name="Custom Blocks" colour="#A65C81">
+		<block type="say_something"></block>
+		<block type="set_led"></block>
+		<block type="play_sound"></block>
+	</category>
+	-->
+	<category name="Spraak" colour="#4dd0e1">
+		<block type="say_something"></block>
+		<block type="set_language"></block>
+		<block type="test"></block>
+	</category>
+</xml>
+
+<div id="blocklyDiv" style="height: 500px; width: 100%;"></div>
+<button onclick="runCode()">Run</button>
+<script src="{{ url_for('static', filename='scripts/index.js') }}"></script>
+</body>
+</html>
