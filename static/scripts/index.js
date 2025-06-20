@@ -4,7 +4,7 @@ let workspace;
 window.addEventListener('DOMContentLoaded', () => {
 	workspace = Blockly.inject('blocklyDiv', {
 		toolbox: document.getElementById('toolbox'),
-		theme: Blockly.Themes.Dark
+		theme: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? Blockly.Themes.Dark : Blockly.Themes.Classic
 	});
 
 	// Define all blocks
@@ -179,7 +179,7 @@ function defineAllBlocks() {
 function extractCommands(workspace) {
 	const startBlock = workspace.getTopBlocks(true).find(b => b.type === 'start_program');
 	if (!startBlock) {
-		alert("Missing 'start_program' block.");
+		openModal("Failure!", "Missing 'start_program' block.");
 		return [];
 	}
 
@@ -311,4 +311,41 @@ Blockly.Themes.Dark = Blockly.Theme.defineTheme('dark', {
 
   },
 
+});
+
+if (!document.getElementById("modal")) {
+	const modalHtml = `
+		<div id="modal" class="modal" onclick="outsideClick(event)">
+			<div class="modal-content">
+				<span class="close" onclick="closeModal()">&times;</span>
+				<h2 id="modal-title"></h2>
+				<p id="modal-body"></p>
+			</div>
+		</div>
+	`;
+	document.body.insertAdjacentHTML("beforeend", modalHtml);
+}
+
+const modal = document.getElementById("modal");
+const modalTitle = document.getElementById("modal-title");
+const modalBody = document.getElementById("modal-body");
+
+function openModal(title, content) {
+	modalTitle.textContent = title;
+	modalBody.textContent = content;
+	modal.style.display = "block";
+}
+
+function closeModal() {
+	modal.style.display = "none";
+}
+
+function outsideClick(e) {
+	if (e.target === modal) {
+	    closeModal();
+	}
+}
+
+window.addEventListener("keydown", (e) => {
+	if (e.key === "Escape") closeModal();
 });
